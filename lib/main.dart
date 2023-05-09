@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_final/screens/add_task_screen.dart';
-import 'package:flutter_final/screens/home_screen.dart';
+import 'package:flutter_final/ui/all_categories.dart';
+import 'package:flutter_final/ui/all_tasks.dart';
+import 'package:flutter_final/ui/edit_task.dart';
+import 'package:flutter_final/ui/home_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,9 +26,10 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        primarySwatch: Colors.blue,
+        colorScheme: ColorScheme.light(primary: Color(0xFF0059B3),background: Color.fromRGBO(247, 247, 247, 10),)
+
       ),
-      home: AddTaskScreen(),
+      home: AllCategories(),
     );
   }
 }

@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:to_do_app/home_screen.dart';
+
+import '../../models/Category.dart';
+
+
 
 class CategoryItem extends StatelessWidget {
   Category category;

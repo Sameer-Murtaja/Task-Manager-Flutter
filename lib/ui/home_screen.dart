@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:to_do_app/item_task.dart';
 
-import 'item_category.dart';
+import '../data/sample_data.dart';
+import '../models/Category.dart';
+import '../models/Task.dart';
+import 'items/item_category.dart';
+import 'items/item_task.dart';
 
 class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
@@ -232,27 +235,27 @@ class HomeScreen extends StatelessWidget {
                           const SizedBox(
                             height: 8.0,
                           ),
-                          CategoryItem(Data.categorys[1]),
+                          CategoryItem(Data.categories[1]),
                           const SizedBox(
                             height: 8.0,
                           ),
-                          CategoryItem(Data.categorys[2]),
+                          CategoryItem(Data.categories[2]),
                           const SizedBox(
                             height: 8.0,
                           ),
-                          CategoryItem(Data.categorys[3]),
+                          CategoryItem(Data.categories[3]),
                           const SizedBox(
                             height: 8.0,
                           ),
-                          CategoryItem(Data.categorys[4]),
+                          CategoryItem(Data.categories[4]),
                           const SizedBox(
                             height: 8.0,
                           ),
-                          CategoryItem(Data.categorys[2]),
+                          CategoryItem(Data.categories[2]),
                           const SizedBox(
                             height: 8.0,
                           ),
-                          CategoryItem(Data.categorys[2]),
+                          CategoryItem(Data.categories[2]),
                         ],
                       )),
                 ),
@@ -264,37 +267,3 @@ class HomeScreen extends StatelessWidget {
 }
 
 //********************************* for testing
-class Task {
-  String title;
-  String description;
-
-  Task(this.title, this.description);
-}
-
-class Category {
-  String name;
-  Category(this.name);
-}
-
-class Data {
-  static List<Task> tasks = [
-    Task("Test",
-        "Task description Task description Task description Task description Task description Task description Task description"),
-    Task("Test2",
-        "Task description Task description Task description Task description Task description Task description Task description"),
-    Task("Test3",
-        "Task description Task description Task description Task description Task description Task description Task description"),
-    Task("Test4",
-        "Task description Task description Task description Task description Task description Task description Task description"),
-    Task("Test5",
-        "Task description Task description Task description Task description Task description Task description Task description"),
-  ];
-
-  static List<Category> categorys = [
-    Category("Category"),
-    Category("Category1"),
-    Category("Category2"),
-    Category("Category3"),
-    Category("Categor74"),
-  ];
-}
