@@ -5,9 +5,11 @@ import '../models/Task.dart';
 class Data {
   static List<Task> tasks = [
     Task("Test",
-        "Task description Task description Task description Task description Task description Task description Task description"),
+        "Task description Task description Task description Task description Task description Task description Task description",
+        category: categories[0]),
     Task("Test2",
-        "Task description Task description Task description Task description Task description Task description Task description"),
+        "Task description Task description Task description Task description Task description Task description Task description",
+        category: categories[1]),
     Task("Test3",
         "Task description Task description Task description Task description Task description Task description Task description"),
     Task("Test4",

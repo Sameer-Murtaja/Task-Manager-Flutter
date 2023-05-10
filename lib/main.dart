@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_final/data/sample_data.dart';
+import 'package:flutter_final/models/Task.dart';
 import 'package:flutter_final/ui/all_categories.dart';
 import 'package:flutter_final/ui/all_tasks.dart';
 import 'package:flutter_final/ui/edit_task.dart';
@@ -29,7 +31,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.light(primary: Color(0xFF0059B3),background: Color.fromRGBO(247, 247, 247, 10),)
 
       ),
-      home: AllCategories(),
+      home: AllTasks(),
     );
   }
 }

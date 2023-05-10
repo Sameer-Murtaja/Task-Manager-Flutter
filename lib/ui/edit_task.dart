@@ -1,15 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_final/data/sample_data.dart';
+import 'package:flutter_final/models/Category.dart';
+import 'package:flutter_final/models/Task.dart';
+import 'package:flutter_final/ui/all_tasks.dart';
 
 class EditTask extends StatefulWidget {
+  Task task;
+  EditTask(this.task);
+
   @override
   State<EditTask> createState() => _EditTaskState();
 }
 
 class _EditTaskState extends State<EditTask> {
-  String taskState = "To do";
-  String category = "none";
+  Category? category;
+  late TaskState taskState;
+
+  TextEditingController titleController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    titleController.text = widget.task.title;
+    descriptionController.text = widget.task.description;
+    category = widget.task.category;
+    taskState = widget.task.state;
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Edit Task"),
@@ -28,7 +44,8 @@ class _EditTaskState extends State<EditTask> {
                 color: Colors.white,
               ),
               padding: EdgeInsets.all(8),
-              child: const TextField(
+              child: TextField(
+                controller: titleController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(borderSide: BorderSide.none),
                   hintText: 'Title',
@@ -47,7 +64,8 @@ class _EditTaskState extends State<EditTask> {
                 color: Colors.white,
               ),
               padding: EdgeInsets.all(8),
-              child: const TextField(
+              child: TextField(
+                controller: descriptionController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(borderSide: BorderSide.none),
                   hintText: 'Description',
@@ -66,13 +84,27 @@ class _EditTaskState extends State<EditTask> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  ...Data.categories.map(
+                    (e) => Row(
+                      children: [
+                        Radio(
+                            value: e,
+                            groupValue: category,
+                            onChanged: (newValue) {
+                              widget.task.category = e;
+                              setState(() {});
+                            }),
+                        Text(e.name),
+                      ],
+                    ),
+                  ),
                   Row(
                     children: [
                       Radio(
-                          value: "none",
+                          value: null,
                           groupValue: category,
                           onChanged: (newValue) {
-                            category = "none";
+                            widget.task.category = null;
                             setState(() {});
                           }),
                       Text("none"),
@@ -94,42 +126,20 @@ class _EditTaskState extends State<EditTask> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        Radio(
-                            value: "To do",
-                            groupValue: taskState,
-                            onChanged: (newValue) {
-                              taskState = "To do";
-                              setState(() {});
-                            }),
-                        Text("To do"),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Radio(
-                            value: "In progress",
-                            groupValue: taskState,
-                            onChanged: (newValue) {
-                              taskState = "In progress";
-                              setState(() {});
-                            }),
-                        Text("In progress"),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Radio(
-                            value: "Done",
-                            groupValue: taskState,
-                            onChanged: (newValue) {
-                              taskState = "Done";
-                              setState(() {});
-                            }),
-                        Text("Done"),
-                      ],
-                    ),
+                    ...TaskState.values.map(
+                      (e) => Row(
+                        children: [
+                          Radio(
+                              value: e,
+                              groupValue: taskState,
+                              onChanged: (newValue) {
+                                widget.task.state = e;
+                                setState(() {});
+                              }),
+                          Text(e.name),
+                        ],
+                      ),
+                    )
                   ],
                 )
               ],
@@ -139,7 +149,6 @@ class _EditTaskState extends State<EditTask> {
               child: Align(
                 alignment: Alignment.bottomCenter,
                 child: ElevatedButton(
-                  onPressed: () {},
                   style: ElevatedButton.styleFrom(
                     primary: Color(0xFF0059B3),
                     minimumSize: Size(double.infinity, 56),
@@ -151,6 +160,11 @@ class _EditTaskState extends State<EditTask> {
                     'Edit Task',
                     style: TextStyle(color: Colors.white),
                   ),
+                  onPressed: () {
+                    widget.task.title = titleController.text;
+                    widget.task.description = descriptionController.text;
+                    Navigator.of(context).pop();
+                  },
                 ),
               ),
             ),
@@ -159,7 +173,6 @@ class _EditTaskState extends State<EditTask> {
               child: Align(
                 alignment: Alignment.bottomCenter,
                 child: ElevatedButton(
-                  onPressed: () {},
                   style: ElevatedButton.styleFrom(
                     primary: Color.fromARGB(255, 255, 0, 0),
                     minimumSize: Size(double.infinity, 56),
@@ -171,6 +184,11 @@ class _EditTaskState extends State<EditTask> {
                     'Detele Task',
                     style: TextStyle(color: Colors.white),
                   ),
+                  onPressed: () {
+                    Data.tasks.removeWhere((element) => element == widget.task);
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                  },
                 ),
               ),
             ),

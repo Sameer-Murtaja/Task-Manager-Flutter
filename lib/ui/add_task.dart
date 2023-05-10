@@ -1,8 +1,11 @@
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_final/data/sample_data.dart';
+import 'package:flutter_final/models/Task.dart';
 
 class AddNewTask extends StatelessWidget {
+  TextEditingController titleController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -22,7 +25,8 @@ class AddNewTask extends StatelessWidget {
               color: Colors.white,
             ),
             padding: EdgeInsets.all(8),
-            child: const TextField(
+            child: TextField(
+              controller: titleController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(borderSide: BorderSide.none),
                 hintText: 'Title',
@@ -38,7 +42,8 @@ class AddNewTask extends StatelessWidget {
               color: Colors.white,
             ),
             padding: EdgeInsets.all(8),
-            child: const TextField(
+            child: TextField(
+              controller: descriptionController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(borderSide: BorderSide.none),
                 hintText: 'Description',
@@ -51,7 +56,6 @@ class AddNewTask extends StatelessWidget {
             child: Align(
               alignment: Alignment.bottomCenter,
               child: ElevatedButton(
-                onPressed: () {},
                 style: ElevatedButton.styleFrom(
                   primary: Color(0xFF0059B3),
                   minimumSize: Size(double.infinity, 56),
@@ -60,6 +64,11 @@ class AddNewTask extends StatelessWidget {
                   ),
                 ),
                 child: Text('Add Task'),
+                onPressed: () {
+                  if(titleController.text.isNotEmpty && descriptionController.text.isNotEmpty){
+                    Data.tasks.add(Task(titleController.text, descriptionController.text));
+                  }
+                },
               ),
             ),
           ),
@@ -68,4 +77,3 @@ class AddNewTask extends StatelessWidget {
     );
   }
 }
-

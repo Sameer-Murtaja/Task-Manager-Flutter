@@ -7,7 +7,19 @@ import '../models/Task.dart';
 import 'items/item_category.dart';
 import 'items/item_task.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+
+  refreshPage(){
+    setState(() {
+      
+    });
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
@@ -172,18 +184,23 @@ class HomeScreen extends StatelessWidget {
                       margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                       child: Column(
                         children: [
-                          const SizedBox(
-                            height: 8.0,
+                          ...Data.tasks.take(3).toList().map((e) => 
+                          Padding(padding: EdgeInsets.only(top: 8),
+                          child: TaskItem(e,refreshPage),)
                           ),
-                          TaskItem(Data.tasks[1]),
-                          const SizedBox(
-                            height: 8.0,
-                          ),
-                          TaskItem(Data.tasks[2]),
-                          const SizedBox(
-                            height: 8.0,
-                          ),
-                          TaskItem(Data.tasks[2]),
+
+                          // const SizedBox(
+                          //   height: 8.0,
+                          // ),
+                          // TaskItem(Data.tasks[1],refreshPage()),
+                          // const SizedBox(
+                          //   height: 8.0,
+                          // ),
+                          // TaskItem(Data.tasks[2]),
+                          // const SizedBox(
+                          //   height: 8.0,
+                          // ),
+                          // TaskItem(Data.tasks[2]),
                         ],
                       )),
                 ),
