@@ -6,6 +6,7 @@ import 'package:flutter_final/ui/all_tasks.dart';
 
 class EditTask extends StatefulWidget {
   Task task;
+  late Task currentTask;
   EditTask(this.task);
 
   @override
@@ -15,16 +16,22 @@ class EditTask extends StatefulWidget {
 class _EditTaskState extends State<EditTask> {
   Category? category;
   late TaskState taskState;
+  @override
+  void initState() {
+    super.initState();
+    widget.currentTask = Task(widget.task.title, widget.task.description,
+        category: widget.task.category, state: widget.task.state);
+  }
 
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    titleController.text = widget.task.title;
-    descriptionController.text = widget.task.description;
-    category = widget.task.category;
-    taskState = widget.task.state;
+    titleController.text = widget.currentTask.title;
+    descriptionController.text = widget.currentTask.description;
+    category = widget.currentTask.category;
+    taskState = widget.currentTask.state;
 
     return Scaffold(
       appBar: AppBar(
@@ -91,8 +98,12 @@ class _EditTaskState extends State<EditTask> {
                             value: e,
                             groupValue: category,
                             onChanged: (newValue) {
-                              widget.task.category = e;
-                              setState(() {});
+                              widget.currentTask.category = e;
+                              setState(() {
+                                widget.currentTask.title = titleController.text;
+                                widget.currentTask.description =
+                                    descriptionController.text;
+                              });
                             }),
                         Text(e.name),
                       ],
@@ -104,8 +115,12 @@ class _EditTaskState extends State<EditTask> {
                           value: null,
                           groupValue: category,
                           onChanged: (newValue) {
-                            widget.task.category = null;
-                            setState(() {});
+                            widget.currentTask.category = null;
+                            setState(() {
+                              widget.currentTask.title = titleController.text;
+                              widget.currentTask.description =
+                                  descriptionController.text;
+                            });
                           }),
                       Text("none"),
                     ],
@@ -133,7 +148,7 @@ class _EditTaskState extends State<EditTask> {
                               value: e,
                               groupValue: taskState,
                               onChanged: (newValue) {
-                                widget.task.state = e;
+                                widget.currentTask.state = e;
                                 setState(() {});
                               }),
                           Text(e.name),
@@ -163,6 +178,8 @@ class _EditTaskState extends State<EditTask> {
                   onPressed: () {
                     widget.task.title = titleController.text;
                     widget.task.description = descriptionController.text;
+                    widget.task.category = widget.currentTask.category;
+                    widget.task.state = widget.currentTask.state;
                     Navigator.of(context).pop();
                   },
                 ),
