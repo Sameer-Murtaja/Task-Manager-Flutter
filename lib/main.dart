@@ -5,6 +5,9 @@ import 'package:flutter_final/ui/all_categories.dart';
 import 'package:flutter_final/ui/all_tasks.dart';
 import 'package:flutter_final/ui/edit_task.dart';
 import 'package:flutter_final/ui/home_screen.dart';
+import 'package:flutter_final/ui/not_found_page.dart';
+import 'package:flutter_final/ui/tthome_page.dart';
+import 'package:flutter_final/util/routes.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,7 +34,20 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.light(primary: Color(0xFF0059B3),background: Color.fromRGBO(247, 247, 247, 10),)
 
       ),
-      home: AllTasks(),
+      home: ScreenContainer(),
+/*
+      routes: {
+        RoutesName.homePage: (context) => HomeScreen(),
+        RoutesName.categoriesPage: (context) => AllCategories(),
+        RoutesName.tasksPage: (context) => AllTasks(),
+        RoutesName.pageNotFound: (context) => PageNotFound()
+      },
+
+        onGenerateRoute: (RouteSettings settings) {
+          return MaterialPageRoute(builder: (context){
+            return PageNotFound();
+        });
+  },*/
     );
   }
 }

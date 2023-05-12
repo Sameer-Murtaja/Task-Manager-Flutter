@@ -1,18 +1,22 @@
 import 'package:flutter_final/models/Category.dart';
 
+
+
+
+
 class Task {
   String title;
   String description;
   Category? category;
   TaskState state;
 
-  Task(this.title, this.description, {this.category, this.state = TaskState.todo});
+  Task(this.title, this.description, {this.category, this.state = TaskState.TODO});
 
 }
 
-
   enum TaskState{
-    todo,
-    inProgress,
-    done
+    TODO,
+    IN_PROGRESS,
+    DONE
   }
+
