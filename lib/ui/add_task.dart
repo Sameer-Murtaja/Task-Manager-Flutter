@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_final/data/dbController.dart';
 import 'package:flutter_final/data/sample_data.dart';
 import 'package:flutter_final/models/Task.dart';
+import 'package:provider/provider.dart';
 
 class AddNewTask extends StatelessWidget {
   TextEditingController titleController = TextEditingController();
@@ -14,7 +16,8 @@ class AddNewTask extends StatelessWidget {
         actions: [],
       ),
       backgroundColor: Color.fromRGBO(247, 247, 247, 10),
-      body: ListView(
+      body: Consumer<DbController>(builder: (context,pr,child){
+        return ListView(
         children: [
           Container(
             width: 328,
@@ -66,14 +69,22 @@ class AddNewTask extends StatelessWidget {
                 child: Text('Add Task'),
                 onPressed: () {
                   if(titleController.text.isNotEmpty && descriptionController.text.isNotEmpty){
-                    Data.tasks.add(Task(titleController.text, descriptionController.text));
+                    pr.addTask(titleController.text, descriptionController.text);
+                     Navigator.of(context).pop();
                   }
                 },
               ),
             ),
           ),
         ],
-      ),
+      );
+      })
+      
+      
+      
+
+
+
     );
   }
 }
