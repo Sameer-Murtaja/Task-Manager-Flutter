@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_final/data/sample_data.dart';
+import 'package:flutter_final/Controller/sample_data.dart';
 import 'package:flutter_final/models/Category.dart';
 import 'package:flutter_final/models/Task.dart';
-import 'package:flutter_final/ui/all_tasks.dart';
+import 'package:flutter_final/View/all_tasks.dart';
 import 'package:provider/provider.dart';
 
-import '../data/dbController.dart';
+import '../Controller/CategoryProvider.dart';
+import '../Controller/TaskProvider.dart';
 
 class EditTask extends StatefulWidget {
   int taskId;
-  late Task currentTask;
   EditTask(this.taskId);
 
   @override
@@ -17,41 +17,31 @@ class EditTask extends StatefulWidget {
 }
 
 class _EditTaskState extends State<EditTask> {
-  int? categoryId;
-  late TaskState taskState;
 
-  TextEditingController titleController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
-
+  
   @override
   void initState() {
     super.initState();
 
-    Task task = Provider.of<DbController>(context, listen: false)
+    Task task = Provider.of<TaskProvider>(context, listen: false)
         .tasks
         .where((e) => e.id == widget.taskId)
         .first;
-    widget.currentTask = Task(
-        title: task.title,
-        description: task.description,
-        categoryId: task.categoryId,
-        state: task.state);
+
+        Provider.of<TaskProvider>(context, listen: false)
+        .setCurrentTask(task);
   }
 
   @override
   Widget build(BuildContext context) {
-    titleController.text = widget.currentTask.title!;
-    descriptionController.text = widget.currentTask.description!;
-    categoryId = widget.currentTask.categoryId;
-    taskState = widget.currentTask.state!;
 
     return Scaffold(
         appBar: AppBar(
           title: Text("Edit Task"),
         ),
         backgroundColor: Color.fromRGBO(247, 247, 247, 10),
-        body: Consumer<DbController>(builder: (context, pr, x) {
-          return Padding(
+        body: Consumer2<TaskProvider,CategoryProvider>(builder: (context, taskPr,categoryPr, x) {
+      return Padding(
             padding: const EdgeInsets.all(10),
             child: ListView(
               children: [
@@ -65,7 +55,7 @@ class _EditTaskState extends State<EditTask> {
                   ),
                   padding: EdgeInsets.all(8),
                   child: TextField(
-                    controller: titleController,
+                    controller: taskPr.titleController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(borderSide: BorderSide.none),
                       hintText: 'Title',
@@ -85,7 +75,7 @@ class _EditTaskState extends State<EditTask> {
                   ),
                   padding: EdgeInsets.all(8),
                   child: TextField(
-                    controller: descriptionController,
+                    controller: taskPr.descriptionController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(borderSide: BorderSide.none),
                       hintText: 'Description',
@@ -105,22 +95,17 @@ class _EditTaskState extends State<EditTask> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ...Data.categories.map(
+                      ...categoryPr.categories.map(
                         (e) => Row(
                           children: [
                             Radio(
                                 value: e.id,
-                                groupValue: categoryId,
+                                groupValue: taskPr.currentTask?.categoryId,
                                 onChanged: (newValue) {
-                                  widget.currentTask.categoryId = e.id;
-                                  setState(() {
-                                    widget.currentTask.title =
-                                        titleController.text;
-                                    widget.currentTask.description =
-                                        descriptionController.text;
-                                  });
+                                 taskPr.changeCurrentTaskCategory(e.id??-1);
+                                  
                                 }),
-                            Text(e.name),
+                            Text(e.name??""),
                           ],
                         ),
                       ),
@@ -128,15 +113,10 @@ class _EditTaskState extends State<EditTask> {
                         children: [
                           Radio(
                               value: null,
-                              groupValue: categoryId,
+                              groupValue: taskPr.currentTask?.categoryId,
                               onChanged: (newValue) {
-                                widget.currentTask.categoryId = null;
-                                setState(() {
-                                  widget.currentTask.title =
-                                      titleController.text;
-                                  widget.currentTask.description =
-                                      descriptionController.text;
-                                });
+                                taskPr.changeCurrentTaskCategory(-1);
+                                
                               }),
                           Text("none"),
                         ],
@@ -163,9 +143,9 @@ class _EditTaskState extends State<EditTask> {
                             children: [
                               Radio(
                                   value: e,
-                                  groupValue: taskState,
+                                  groupValue: taskPr.currentTask?.state,
                                   onChanged: (newValue) {
-                                    widget.currentTask.state = e;
+                                    taskPr.changeCurrentTaskState(e);
                                     setState(() {});
                                   }),
                               Text(e.name),
@@ -195,11 +175,11 @@ class _EditTaskState extends State<EditTask> {
                       onPressed: () {
                         Task task = Task(
                             id: widget.taskId,
-                            title: titleController.text,
-                            description: descriptionController.text,
-                            categoryId: widget.currentTask.categoryId,
-                            state: widget.currentTask.state);
-                        pr.updateTask(task);
+                            title: taskPr.titleController.text,
+                            description: taskPr.descriptionController.text,
+                            categoryId: taskPr.currentTask?.categoryId,
+                            state: taskPr.currentTask?.state);
+                        taskPr.updateTask(task);
                         Navigator.of(context).pop();
                         Navigator.of(context).pop();
                       },
@@ -223,7 +203,7 @@ class _EditTaskState extends State<EditTask> {
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () {
-                        pr.deleteTask(widget.taskId);
+                        taskPr.deleteTask(widget.taskId);
                         Navigator.of(context).pop();
                         Navigator.of(context).pop();
                       },

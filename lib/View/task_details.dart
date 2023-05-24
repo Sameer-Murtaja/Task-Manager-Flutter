@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_final/models/Task.dart';
 import 'package:provider/provider.dart';
 
-import '../data/dbController.dart';
+import '../Controller/CategoryProvider.dart';
+import '../Controller/TaskProvider.dart';
 import 'edit_task.dart';
 
 class TaskDetails extends StatefulWidget {
   int taskId;
-  late Task currentTask;
   TaskDetails(this.taskId);
 
   @override
@@ -15,48 +15,56 @@ class TaskDetails extends StatefulWidget {
 }
 
 class _TaskDetailsState extends State<TaskDetails> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    Task task = Provider.of<TaskProvider>(context, listen: false)
+        .tasks
+        .where((e) => e.id == widget.taskId)
+        .first;
+
+        Provider.of<TaskProvider>(context, listen: false)
+        .setCurrentTask(task);
+  }
 
   @override
   Widget build(BuildContext context) {
-    try{
-
-    widget.currentTask = Provider.of<DbController>(context).tasks.where((e) => e.id == widget.taskId).first;
-    }catch(e){
-      widget.currentTask = Task(title: "title", description: "description");
-    }
-    
-    return Scaffold(
-        appBar: AppBar(
-          title: Text("Task Details"),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: ((context) => EditTask(widget.taskId))));
-                },
-                icon: Icon(Icons.edit))
-          ],
-        ),
-        body: Consumer<DbController>(builder: (context, pr, x) {
-          return Padding(
+    return Consumer2<TaskProvider, CategoryProvider>(
+        builder: (context, taskPr, categoryPr, x) {
+      return Scaffold(
+          appBar: AppBar(
+            title: Text("Task Details"),
+            actions: [
+              IconButton(
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: ((context) => EditTask(widget.taskId))));
+                  },
+                  icon: Icon(Icons.edit))
+            ],
+          ),
+          body: Padding(
             padding: const EdgeInsets.all(10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(widget.currentTask.title!,
+                Text(taskPr.currentTask?.title??"",
                     style:
                         TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
                 SizedBox(
                   height: 15,
                 ),
-                Text(widget.currentTask.description!),
+                Text(taskPr.currentTask?.description??""),
                 SizedBox(
                   height: 20,
                 ),
                 Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Text("Category: ",
                       style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text(widget.currentTask.categoryId.toString()),
+                  Text(categoryPr
+                      .getCategoryName(taskPr.currentTask?.categoryId ?? -1)),
                 ]),
                 SizedBox(
                   height: 20,
@@ -66,12 +74,12 @@ class _TaskDetailsState extends State<TaskDetails> {
                   children: [
                     Text("State: ",
                         style: TextStyle(fontWeight: FontWeight.bold)),
-                    Text(widget.currentTask.state?.name?? ""),
+                    Text(taskPr.currentTask?.state?.name ?? ""),
                   ],
                 )
               ],
             ),
-          );
-        }));
+          ));
+    });
   }
 }

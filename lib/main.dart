@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_final/data/sample_data.dart';
+import 'package:flutter_final/Controller/sample_data.dart';
 import 'package:flutter_final/models/Task.dart';
 import 'package:flutter_final/models/dbHelper.dart';
-import 'package:flutter_final/ui/all_categories.dart';
-import 'package:flutter_final/ui/all_tasks.dart';
-import 'package:flutter_final/ui/edit_task.dart';
-import 'package:flutter_final/ui/home_screen.dart';
-import 'package:flutter_final/ui/not_found_page.dart';
-import 'package:flutter_final/ui/tthome_page.dart';
+import 'package:flutter_final/View/all_categories.dart';
+import 'package:flutter_final/View/all_tasks.dart';
+import 'package:flutter_final/View/edit_task.dart';
+import 'package:flutter_final/View/home_screen.dart';
+import 'package:flutter_final/View/not_found_page.dart';
+import 'package:flutter_final/View/tthome_page.dart';
 import 'package:flutter_final/util/routes.dart';
 import 'package:provider/provider.dart';
 
-import 'data/dbController.dart';
+import 'Controller/CategoryProvider.dart';
+import 'Controller/TaskProvider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,8 +26,15 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<DbController>(
-        create: (context) => DbController(),
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider<TaskProvider>(
+            create: (context) => TaskProvider(),
+          ),
+          ChangeNotifierProvider<CategoryProvider>(
+            create: (context) => CategoryProvider(),
+          ),
+        ],
         child: MaterialApp(
           title: 'Flutter Demo',
           theme: ThemeData(

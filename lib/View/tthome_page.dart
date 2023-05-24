@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter_final/ui/all_categories.dart';
-import 'package:flutter_final/ui/all_tasks.dart';
+import 'package:flutter_final/View/all_categories.dart';
+import 'package:flutter_final/View/all_tasks.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'home_screen.dart';
 

@@ -33,7 +33,7 @@ class Task {
       "title": title,
       "description": description,
       "categoryId": categoryId,
-      "state": state!.name
+      "state": state?.name
     };
   }
 }

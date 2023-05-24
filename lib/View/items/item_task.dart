@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_final/ui/task_details.dart';
+import 'package:flutter_final/View/task_details.dart';
 
 import '../../models/Task.dart';
 

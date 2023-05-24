@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_final/models/Category.dart';
 import 'package:flutter_final/models/Task.dart';
-import 'package:flutter_final/ui/add_task.dart';
-import 'package:flutter_final/ui/items/item_task.dart';
+import 'package:flutter_final/View/add_task.dart';
+import 'package:flutter_final/View/items/item_task.dart';
 import 'package:provider/provider.dart';
 
-import '../data/dbController.dart';
-import '../data/sample_data.dart';
+import '../Controller/TaskProvider.dart';
+import '../Controller/sample_data.dart';
 
 class AllTasks extends StatefulWidget {
   TaskState? state;
@@ -34,15 +34,15 @@ class _AllTasksState extends State<AllTasks> {
     return Scaffold(
       appBar: AppBar(title: Text("Tasks")),
       backgroundColor: Color.fromRGBO(247, 247, 247, 10),
-      body: Consumer<DbController>(builder: (context, pr, x) {
+      body: Consumer<TaskProvider>(builder: (context, pr, x) {
         return pr.isLoading
             ? const Center(
                 child: CircularProgressIndicator(),
               )
-            : pr.tasks.isEmpty
+            : filterTasks(pr.tasks).isEmpty
                 ? Center(child: Text("no tasks"))
                 : ListView(
-                    children: pr.tasks
+                    children: filterTasks(pr.tasks)
                         .map((e) => Container(
                             margin: EdgeInsets.symmetric(
                                 vertical: 8, horizontal: 16),
@@ -54,7 +54,7 @@ class _AllTasksState extends State<AllTasks> {
           foregroundColor: Colors.white,
           child: Icon(Icons.add_outlined),
           onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (c) => AddNewTask()));
+            Navigator.of(context).push(MaterialPageRoute(builder: (c) => AddNewTask(category: widget.category, state: widget.state,)));
           }),
     );
   }

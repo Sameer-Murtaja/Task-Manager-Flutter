@@ -1,11 +1,42 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_final/models/Task.dart';
 import 'package:flutter_final/models/dbHelper.dart';
 
-class DbController extends ChangeNotifier {
-  DbController() {
+import '../models/Category.dart';
+
+class TaskProvider extends ChangeNotifier {
+
+  TaskProvider() {
     getAllTasks();
   }
+
+  Task? currentTask;
+  TextEditingController titleController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+
+setCurrentTask(Task task){
+  currentTask = task;
+  titleController.text = task.title??"";
+  descriptionController.text = task.description??"";
+  notifyListeners();
+}
+
+changeCurrentTaskCategory(int id){
+  currentTask?.categoryId = id;
+  // currentTask?.title = titleController.text;
+  // currentTask?.description = descriptionController.text;
+  notifyListeners();
+}
+
+changeCurrentTaskState(TaskState state){
+  currentTask?.state = state;
+  notifyListeners();
+}
+
+
+
   List<Task> tasks = [];
   bool isLoading = false;
   flipIsLoading() {
@@ -19,10 +50,12 @@ class DbController extends ChangeNotifier {
     flipIsLoading();
   }
 
-  addTask(String title, String description) async {
+  addTask(String title, String description, {Category? category, TaskState? state}) async {
     Task task = Task(
       title: title,
       description: description,
+      categoryId: category?.id,
+      state: state?? TaskState.TODO
     );
     await DbHelper.dbHelper.addTask(task);
     getAllTasks();
